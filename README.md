@@ -2,11 +2,11 @@
 
 Hello everyone\! 👋
 
-Let me introduce myself, I'm **Eki Zulfar Rachman**. On this occasion, I'd like to share the portfolio website project that I've developed.
+I’m Kevin Gultom, and this is my personal portfolio website where I showcase my projects, achievements, and technical skills.
+## 🌐 Live Demo
 
-## 🚀 Live Demo
+Check it out here:[https://kevingtm.vercel.app/] 
 
-**Website Link:** [https://www.eki.my.id/](https://www.eki.my.id/)
 
 ## 🛠️ Tech Stack
 
@@ -35,8 +35,8 @@ Follow these steps to run the project locally:
 ### 1\. Clone the Repository
 
 ```bash
-git clone https://github.com/EkiZR/Portofolio_V5.git
-cd Portofolio_V5
+git clone https://github.com/kevingultom/WebPortofolio.git
+cd WebPortofolio
 ```
 
 ### 2\. Install Dependencies
@@ -237,10 +237,10 @@ We would appreciate it if you decide to use this project. Please include proper 
 
 If you have any questions or need help with the setup, feel free to reach out\!
 
-**Eki Zulfar Rachman**
+**Kevin Gultom**
 
-  - Website: [https://www.eki.my.id/](https://www.eki.my.id/)
-  - GitHub: [EkiZR](https://github.com/EkiZR)
+  - Website: [kevingtm](https://kevingtm.vercel.app/)
+  - GitHub: [kevingultom](https://github.com/EkiZR)
 
 -----
 
