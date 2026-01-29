@@ -211,7 +211,7 @@ export default function FullWidthTabs() {
     if (type === 'projects') {
       setShowAllProjects(prev => !prev);
     } else {
-      setShowAllCertificates(prev => !prev);
+      setShowAllCertificates(prev => !prev);kita 
     }
   }, []);
 
