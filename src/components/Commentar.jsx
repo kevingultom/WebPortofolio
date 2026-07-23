@@ -79,8 +79,8 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
     const handleImageChange = useCallback((e) => {
         const file = e.target.files[0];
         if (file) {
-            // Check file size (5MB limit)
-            if (file.size > 5 * 1024 * 1024) {
+            // Check file size (2MB limit)
+            if (file.size > 2 * 1024 * 1024) {
                 alert(t.comments.fileTooLarge);
                 // Reset the input
                 if (e.target) e.target.value = '';

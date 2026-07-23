@@ -103,7 +103,7 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
         >
           <BackgroundEffect />
           
-          <div className="relative min-h-screen flex items-center justify-center px-4">
+          <div className="relative h-full flex items-center justify-center px-4">
             <div className="w-full max-w-4xl mx-auto">
               {/* Icons */}
               <motion.div 

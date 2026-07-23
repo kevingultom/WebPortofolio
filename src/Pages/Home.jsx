@@ -23,7 +23,7 @@ const TECH_LOGOS = [
   { src: "/laravel.svg", name: "Laravel" },
   { src: "/python.svg", name: "Python" },
   { src: "/postgresql.svg", name: "PostgreSQL" },
-  { src: "/supabase.svg", name: "Supabase" },
+  { src: "/flutter.svg", name: "Flutter" },
   { src: "/github.svg", name: "GitHub", plain: true },
 ];
 
@@ -49,6 +49,38 @@ const SocialLink = memo(({ icon: Icon, link, name }) => {
       }}>
       <Icon className="w-[18px] h-[18px] transition-colors duration-300" style={{ color: hover ? brand : "#9ca3af" }} />
     </a>
+  );
+});
+
+// Hero logo: white by default, shifts to a blue→purple gradient on hover.
+// The PNG is used as a CSS mask so we can recolor the shape cleanly.
+const HeroLogo = memo(() => {
+  const maskStyle = {
+    WebkitMaskImage: "url(/logo-K.png)",
+    maskImage: "url(/logo-K.png)",
+    WebkitMaskRepeat: "no-repeat",
+    maskRepeat: "no-repeat",
+    WebkitMaskPosition: "center",
+    maskPosition: "center",
+    WebkitMaskSize: "contain",
+    maskSize: "contain",
+  };
+  return (
+    <div className="group self-center lg:self-start mx-auto lg:mx-0 lg:ml-10 w-44 h-44 sm:w-64 sm:h-64 lg:w-72 lg:h-72 shrink-0 relative">
+      {/* White layer (default) */}
+      <div
+        className="absolute inset-0 bg-white transition-opacity duration-500 group-hover:opacity-0"
+        style={maskStyle}
+      />
+      {/* Colored gradient layer (revealed on hover) */}
+      <div
+        className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          ...maskStyle,
+          backgroundImage: "linear-gradient(135deg, #6366f1 0%, #4f46e5 45%, #7c3aed 100%)",
+        }}
+      />
+    </div>
   );
 });
 
@@ -148,16 +180,9 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Right: photo, aligned with the name, + capability list below */}
+          {/* Right: logo, aligned with the name, + capability list below */}
           <div className="flex flex-col items-start lg:items-end gap-10 lg:pb-4">
-            <div className="self-start ml-6 sm:ml-10 lg:ml-10 w-44 h-44 sm:w-64 sm:h-64 lg:w-72 lg:h-72 shrink-0">
-              <img
-                src="/kg.png"
-                alt="Kevin Gultom"
-                loading="eager"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <HeroLogo />
 
             <div className="border-l border-white/10 pl-6 space-y-5 w-full">
               {CAPABILITIES.map((c, i) => (
