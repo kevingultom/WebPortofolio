@@ -5,7 +5,7 @@ Hello everyone\! 👋
 I’m Kevin Gultom, and this is my personal portfolio website where I showcase my projects, achievements, and technical skills.
 ## 🌐 Live Demo
 
-Check it out here:[https://kevingtm.vercel.app/] 
+Check it out here:[https://kevingtm.my.id/] 
 
 
 ## 🛠️ Tech Stack
@@ -239,8 +239,8 @@ If you have any questions or need help with the setup, feel free to reach out\!
 
 **Kevin Gultom**
 
-  - Website: [kevingtm](https://kevingtm.vercel.app/)
-  - GitHub: [kevingultom](https://github.com/EkiZR)
+  - Website: [kevingtm](https://kevingtm.my.id/)
+  - GitHub: [kevingultom](https://github.com/kevingultom)
 
 -----
 

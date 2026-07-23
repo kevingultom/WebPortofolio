@@ -16,14 +16,17 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
 import { Code, Award, Boxes } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 
-const ToggleButton = ({ onClick, isShowingMore }) => (
+const ToggleButton = ({ onClick, isShowingMore }) => {
+  const { t } = useLanguage();
+  return (
   <button
     onClick={onClick}
     className="
       px-3 py-1.5
-      text-slate-300 
+      text-gray-300
       hover:text-white 
       text-sm 
       font-medium 
@@ -46,7 +49,7 @@ const ToggleButton = ({ onClick, isShowingMore }) => (
     "
   >
     <span className="relative z-10 flex items-center gap-2">
-      {isShowingMore ? "See Less" : "See More"}
+      {isShowingMore ? t.portfolio.seeLess : t.portfolio.seeMore}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -66,9 +69,10 @@ const ToggleButton = ({ onClick, isShowingMore }) => (
         <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
       </svg>
     </span>
-    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-500/50 transition-all duration-300 group-hover:w-full"></span>
+    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white/60 transition-all duration-300 group-hover:w-full"></span>
   </button>
-);
+  );
+};
 
 
 function TabPanel({ children, value, index, ...other }) {
@@ -119,14 +123,19 @@ const techStacks = [
   { icon: "reactjs.svg", language: "ReactJS" },
   { icon: "bootstrap.svg", language: "Bootstrap" },
   { icon: "figma.svg", language: "Figma" },
-  { icon: "github.svg", language: "GitHub" },
+  { icon: "github.svg", language: "GitHub", mono: true },
   { icon: "laravel.svg", language: "Laravel" },
   { icon: "git.svg", language: "Git" },
   { icon: "postgresql.svg", language: "PostgreSQL" },
   { icon: "supabase.svg", language: "Supabase" },
+  { icon: "golang.svg", language: "Golang" },
+  { icon: "dart.svg", language: "Dart" },
+  { icon: "flutter.svg", language: "Flutter" },
+  { icon: "firebase.svg", language: "Firebase" },
 ];
 
 export default function FullWidthTabs() {
+  const { t } = useLanguage();
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [projects, setProjects] = useState([]);
@@ -138,7 +147,7 @@ export default function FullWidthTabs() {
 
   useEffect(() => {
     AOS.init({
-      once: false,
+      once: true,
     });
   }, []);
 
@@ -147,7 +156,7 @@ export default function FullWidthTabs() {
     try {
       // Mengambil data dari Supabase secara paralel
       const [projectsResponse, certificatesResponse] = await Promise.all([
-        supabase.from("projects").select("*").order('id', { ascending: true }),
+        supabase.from("projects").select("*").order('sort_order', { ascending: true, nullsFirst: false }).order('id', { ascending: true }),
         supabase.from("certificates").select("*").order('id', { ascending: true }), 
       ]);
 
@@ -161,11 +170,13 @@ export default function FullWidthTabs() {
         Title: p.title,
         Description: p.description,
         Img: p.img,
+        DetailImg: p.detail_img,
         Link: p.link,
+        ApkLink: p.apk_link,
         Github: p.github,
         TechStack: p.tech_stack || [],
         Features: p.features || [],
-      }));  
+      }));
 
       console.log("PROJECTS FROM SUPABASE:", projectData);
 
@@ -211,7 +222,7 @@ export default function FullWidthTabs() {
     if (type === 'projects') {
       setShowAllProjects(prev => !prev);
     } else {
-      setShowAllCertificates(prev => !prev);kita 
+      setShowAllCertificates(prev => !prev);
     }
   }, []);
 
@@ -220,24 +231,17 @@ export default function FullWidthTabs() {
 
   // Sisa dari komponen (return statement) tidak ada perubahan
   return (
-    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portofolio">
+    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-black overflow-hidden" id="Portofolio">
       {/* Header section - unchanged */}
-      <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-          <span style={{
-            color: '#6366f1',
-            backgroundImage: 'linear-gradient(45deg, #6366f1 10%, #a855f7 93%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
-            Portfolio Showcase
-          </span>
+      <div className="text-center pb-12" data-aos="fade-up" data-aos-duration="700">
+        <p className="text-[11px] tracking-[0.25em] uppercase text-gray-500 mb-4">
+          {t.portfolio.eyebrow}
+        </p>
+        <h2 className="display-tight text-4xl md:text-6xl font-semibold text-white">
+          {t.portfolio.heading}
         </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explore my journey through projects, certifications, and technical expertise</p>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Each section reflects a milestone in my continuous learning journey.
+        <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg mt-4">
+          {t.portfolio.subtitle}
         </p>
       </div>
 
@@ -259,7 +263,7 @@ export default function FullWidthTabs() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: "linear-gradient(180deg, rgba(139, 92, 246, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%)",
+              background: "linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
               backdropFilter: "blur(10px)",
               zIndex: 0,
             },
@@ -278,7 +282,7 @@ export default function FullWidthTabs() {
               "& .MuiTab-root": {
                 fontSize: { xs: "0.9rem", md: "1rem" },
                 fontWeight: "600",
-                color: "#94a3b8",
+                color: "#9ca3af",
                 textTransform: "none",
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 padding: "20px 0",
@@ -287,7 +291,7 @@ export default function FullWidthTabs() {
                 borderRadius: "12px",
                 "&:hover": {
                   color: "#ffffff",
-                  backgroundColor: "rgba(139, 92, 246, 0.1)",
+                  backgroundColor: "rgba(255, 255, 255, 0.06)",
                   transform: "translateY(-2px)",
                   "& .lucide": {
                     transform: "scale(1.1) rotate(5deg)",
@@ -295,15 +299,16 @@ export default function FullWidthTabs() {
                 },
                 "&.Mui-selected": {
                   color: "#fff",
-                  background: "linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2))",
-                  boxShadow: "0 4px 15px -3px rgba(139, 92, 246, 0.2)",
+                  background: "rgba(255, 255, 255, 0.12)",
+                  boxShadow: "0 4px 15px -3px rgba(255, 255, 255, 0.1)",
                   "& .lucide": {
-                    color: "#a78bfa",
+                    color: "#ffffff",
                   },
                 },
               },
               "& .MuiTabs-indicator": {
                 height: 0,
+                backgroundColor: "transparent",
               },
               "& .MuiTabs-flexContainer": {
                 gap: "8px",
@@ -312,17 +317,17 @@ export default function FullWidthTabs() {
           >
             <Tab
               icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Projects"
+              label={t.portfolio.tabs.projects}
               {...a11yProps(0)}
             />
             <Tab
               icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Certificates"
+              label={t.portfolio.tabs.certificates}
               {...a11yProps(1)}
             />
             <Tab
               icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Tech Stack"
+              label={t.portfolio.tabs.techStack}
               {...a11yProps(2)}
             />
           </Tabs>
@@ -347,6 +352,7 @@ export default function FullWidthTabs() {
                       Title={project.Title}
                       Description={project.Description}
                       Link={project.Link}
+                      ApkLink={project.ApkLink}
                       id={project.id}
                     />
                   </div>
@@ -354,7 +360,7 @@ export default function FullWidthTabs() {
               </div>
             </div>
             {projects.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
+              <div className="mt-8 w-full flex justify-center">
                 <ToggleButton
                   onClick={() => toggleShowMore('projects')}
                   isShowingMore={showAllProjects}
@@ -380,7 +386,7 @@ export default function FullWidthTabs() {
               </div>
             </div>
             {certificates.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
+              <div className="mt-8 w-full flex justify-center">
                 <ToggleButton
                   onClick={() => toggleShowMore('certificates')}
                   isShowingMore={showAllCertificates}
@@ -398,7 +404,7 @@ export default function FullWidthTabs() {
                     data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
                     data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
                   >
-                    <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
+                    <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} mono={stack.mono} />
                   </div>
                 ))}
               </div>

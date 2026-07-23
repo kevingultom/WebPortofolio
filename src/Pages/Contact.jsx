@@ -7,8 +7,10 @@ import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
+import { useLanguage } from "../context/LanguageContext";
 
 const ContactPage = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +20,7 @@ const ContactPage = () => {
 
   useEffect(() => {
     AOS.init({
-      once: false,
+      once: true,
     });
   }, []);
 
@@ -35,9 +37,11 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     Swal.fire({
-      title: 'Mengirim Pesan...',
-      html: 'Harap tunggu selagi kami mengirim pesan Anda',
+      title: t.contact.swal.sendingTitle,
+      html: t.contact.swal.sendingHtml,
       allowOutsideClick: false,
+      background: '#0a0a0a',
+      color: '#ffffff',
       didOpen: () => {
         Swal.showLoading();
       }
@@ -64,10 +68,12 @@ const ContactPage = () => {
 
      
       Swal.fire({
-        title: 'Berhasil!',
-        text: 'Pesan Anda telah berhasil terkirim!',
+        title: t.contact.swal.successTitle,
+        text: t.contact.swal.successText,
         icon: 'success',
-        confirmButtonColor: '#6366f1',
+        confirmButtonColor: '#ffffff',
+        background: '#0a0a0a',
+        color: '#ffffff',
         timer: 2000,
         timerProgressBar: true
       });
@@ -84,7 +90,9 @@ const ContactPage = () => {
           title: 'Berhasil!',
           text: 'Pesan Anda telah berhasil terkirim!',
           icon: 'success',
-          confirmButtonColor: '#6366f1',
+          confirmButtonColor: '#ffffff',
+          background: '#0a0a0a',
+          color: '#ffffff',
           timer: 2000,
           timerProgressBar: true
         });
@@ -96,10 +104,12 @@ const ContactPage = () => {
         });
       } else {
         Swal.fire({
-          title: 'Gagal!',
-          text: 'Terjadi kesalahan. Silakan coba lagi nanti.',
+          title: t.contact.swal.failTitle,
+          text: t.contact.swal.failText,
           icon: 'error',
-          confirmButtonColor: '#6366f1'
+          confirmButtonColor: '#ffffff',
+          background: '#0a0a0a',
+          color: '#ffffff',
         });
       }
     } finally {
@@ -110,30 +120,22 @@ const ContactPage = () => {
   return (
     <div className="px-[5%] sm:px-[5%] lg:px-[10%] " >
       <div className="text-center lg:mt-[5%] mt-10 mb-2 sm:px-0 px-[5%]">
+        <p className="text-[11px] tracking-[0.25em] uppercase text-gray-500 mb-4" data-aos="fade-up">
+          {t.contact.eyebrow}
+        </p>
         <h2
-          data-aos="fade-down"
-          data-aos-duration="1000"
-          className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          className="display-tight text-4xl md:text-6xl font-semibold text-white"
         >
-          <span
-            style={{
-              color: "#6366f1",
-              backgroundImage:
-                "linear-gradient(45deg, #6366f1 10%, #a855f7 93%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Contact Me
-          </span>
+          {t.contact.heading}
         </h2>
         <p
           data-aos="fade-up"
-          data-aos-duration="1100"
-          className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2"
+          data-aos-duration="900"
+          className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg mt-4"
         >
-          Punya pertanyaan atau ingin berdiskusi? Kirimkan pesan, saya akan membalasnya segera.
+          {t.contact.subtitle}
         </p>
       </div>
 
@@ -142,20 +144,17 @@ const ContactPage = () => {
         id="Contact"
       >
         <div className="container px-[1%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[45%_55%] 2xl:grid-cols-[35%_65%] gap-12" >
-          <div
-        
-            className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl p-5 py-10 sm:p-10 transform transition-all duration-500 hover:shadow-[#6366f1]/10"
-          >
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-5 py-10 sm:p-10">
             <div className="flex justify-between items-start mb-8">
               <div>
-                <h2 className="text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-                  Hubungi
+                <h2 className="text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                  {t.contact.formTitle}
                 </h2>
                 <p className="text-gray-400">
-                  Mau diskusi sesuatu? Kirim pesan aja, kita ngobrol bareng!
+                  {t.contact.formSubtitle}
                 </p>
               </div>
-              <Share2 className="w-10 h-10 text-[#6366f1] opacity-50" />
+              <Share2 className="w-10 h-10 text-white opacity-50" />
             </div>
 
             <form 
@@ -167,15 +166,15 @@ const ContactPage = () => {
                 data-aos-delay="100"
                 className="relative group"
               >
-                <User className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+                <User className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-white transition-colors" />
                 <input
                   type="text"
                   name="name"
-                  placeholder="Nama Anda"
+                  placeholder={t.contact.namePlaceholder}
                   value={formData.name}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="w-full p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30 transition-all duration-300 hover:border-[#6366f1]/30 disabled:opacity-50"
+                  className="w-full p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300 hover:border-white/40 disabled:opacity-50"
                   required
                 />
               </div>
@@ -184,15 +183,15 @@ const ContactPage = () => {
                 data-aos-delay="200"
                 className="relative group"
               >
-                <Mail className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+                <Mail className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-white transition-colors" />
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email Anda"
+                  placeholder={t.contact.emailPlaceholder}
                   value={formData.email}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="w-full p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30 transition-all duration-300 hover:border-[#6366f1]/30 disabled:opacity-50"
+                  className="w-full p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300 hover:border-white/40 disabled:opacity-50"
                   required
                 />
               </div>
@@ -201,14 +200,14 @@ const ContactPage = () => {
                 data-aos-delay="300"
                 className="relative group"
               >
-                <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+                <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-white transition-colors" />
                 <textarea
                   name="message"
-                  placeholder="Pesan Anda"
+                  placeholder={t.contact.messagePlaceholder}
                   value={formData.message}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="w-full resize-none p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30 transition-all duration-300 hover:border-[#6366f1]/30 h-[9.9rem] disabled:opacity-50"
+                  className="w-full resize-none p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300 hover:border-white/40 h-[9.9rem] disabled:opacity-50"
                   required
                 />
               </div>
@@ -217,10 +216,10 @@ const ContactPage = () => {
                 data-aos-delay="400"
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#6366f1]/20 active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full bg-white text-black py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:bg-gray-200 hover:shadow-lg hover:shadow-white/10 active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <Send className="w-5 h-5" />
-                {isSubmitting ? 'Mengirim...' : 'Kirim Pesan'}
+                {isSubmitting ? t.contact.sending : t.contact.send}
               </button>
             </form>
 
@@ -229,7 +228,7 @@ const ContactPage = () => {
             </div>
           </div>
 
-          <div className="  bg-white/5 backdrop-blur-xl rounded-3xl p-3 py-3 md:p-10 md:py-8 shadow-2xl transform transition-all duration-500 hover:shadow-[#6366f1]/10">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-3 py-3 md:p-10 md:py-8">
             <Komentar />
           </div>
         </div>

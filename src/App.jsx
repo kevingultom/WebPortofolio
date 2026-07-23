@@ -10,10 +10,11 @@ import ContactPage from "./Pages/Contact";
 import ProjectDetails from "./components/ProjectDetail";
 import WelcomeScreen from "./Pages/WelcomeScreen";
 import { AnimatePresence } from 'framer-motion';
-import notfound from "./Pages/404";
 import NotFoundPage from "./Pages/404";
+import { LanguageProvider, useLanguage } from "./context/LanguageContext";
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
+  const { t } = useLanguage();
   return (
     <>
       <AnimatePresence mode="wait">
@@ -30,17 +31,13 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
           <About />
           <Portofolio />
           <ContactPage />
-          <footer>
-            <center>
-              <hr className="my-3 border-gray-400 opacity-15 sm:mx-auto lg:my-6 text-center" />
-              <span className="block text-sm pb-4 text-gray-500 text-center dark:text-gray-400">
-                © 2025{" "}
-                <a href="https://flowbite.com/" className="hover:underline">
-                  Kevgtm™
-                </a>
-                . All Rights Reserved.
+          <footer className="border-t border-white/[0.06] mt-10">
+            <div className="mx-auto max-w-[1400px] px-[6%] lg:px-[8%] py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-lg font-semibold text-white tracking-tight">KEVin.</span>
+              <span className="text-sm text-gray-500">
+                © 2025 Kevin Gultom. {t.footer.rights}
               </span>
-            </center>
+            </div>
           </footer>
         </>
       )}
@@ -70,13 +67,15 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
-        <Route path="/project/:id" element={<ProjectPageLayout />} />
-         <Route path="*" element={<NotFoundPage />} /> {/* Ini route 404 */}
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
+          <Route path="/project/:id" element={<ProjectPageLayout />} />
+           <Route path="*" element={<NotFoundPage />} /> {/* Ini route 404 */}
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }
 
