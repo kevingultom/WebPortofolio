@@ -2,9 +2,17 @@ import React, { useState } from "react"
 import { Modal, IconButton, Box, Fade, Backdrop, Zoom, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import { useTheme } from "../context/ThemeContext"
 
 const Certificate = ({ ImgSertif, Link }) => {
 	const [open, setOpen] = useState(false)
+	const { theme } = useTheme()
+	// Light mode inverts the whole page (see index.css); this image has its own
+	// inline `filter` for contrast/brightness, which otherwise wins over the
+	// generic counter-invert CSS rule (inline styles beat stylesheet rules).
+	// So the counter-invert is baked directly into this component's own filter
+	// values instead, keeping the certificate photo's real colors in both themes.
+	const invertPrefix = theme === "light" ? "invert(1) hue-rotate(180deg) " : ""
 	console.log("CERTIFICATE LINK:", Link)
 
 	const handleOpen = () => {
@@ -38,7 +46,7 @@ const Certificate = ({ ImgSertif, Link }) => {
 							opacity: 1,
 						},
 						"& .certificate-image": {
-							filter: "contrast(1.05) brightness(1) saturate(1.1)",
+							filter: `${invertPrefix}contrast(1.05) brightness(1) saturate(1.1)`,
 						},
 					},
 				}}>
@@ -69,7 +77,7 @@ const Certificate = ({ ImgSertif, Link }) => {
 							height: "100%",
 							display: "block",
 							objectFit: "contain",
-							filter: "contrast(1.10) brightness(0.9) saturate(1.1)",
+							filter: `${invertPrefix}contrast(1.10) brightness(0.9) saturate(1.1)`,
 							transition: "filter 0.3s ease",
 						}}
 						onClick={handleOpen}

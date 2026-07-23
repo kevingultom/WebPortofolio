@@ -23,6 +23,23 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+/* Light mode: the whole site is monochrome (black/white/gray), so a single
+   invert flips it correctly (black<->white, text auto-flips too) instead of
+   re-theming every component by hand. hue-rotate(180deg) keeps any accent
+   colors roughly true to their original hue instead of shifting oddly.
+   Real photos/screenshots/videos are excluded so they stay normal. */
+html.light-theme {
+	filter: invert(1) hue-rotate(180deg);
+	transition: filter 0.35s ease;
+}
+html:not(.light-theme) {
+	transition: filter 0.35s ease;
+}
+html.light-theme img,
+html.light-theme video {
+	filter: invert(1) hue-rotate(180deg);
+}
+
 /* Vercel-style tight display headings */
 .display-tight {
 	letter-spacing: -0.03em;

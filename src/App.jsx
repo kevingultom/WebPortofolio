@@ -12,6 +12,8 @@ import WelcomeScreen from "./Pages/WelcomeScreen";
 import { AnimatePresence } from 'framer-motion';
 import NotFoundPage from "./Pages/404";
 import { LanguageProvider, useLanguage } from "./context/LanguageContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   const { t } = useLanguage();
@@ -67,15 +69,18 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <LanguageProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
-          <Route path="/project/:id" element={<ProjectPageLayout />} />
-           <Route path="*" element={<NotFoundPage />} /> {/* Ini route 404 */}
-        </Routes>
-      </BrowserRouter>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
+            <Route path="/project/:id" element={<ProjectPageLayout />} />
+             <Route path="*" element={<NotFoundPage />} /> {/* Ini route 404 */}
+          </Routes>
+          <ThemeToggle />
+        </BrowserRouter>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 
