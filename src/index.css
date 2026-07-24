@@ -69,6 +69,27 @@ html.light-theme video {
 	opacity: 1;
 }
 
+/* Light mode: tech/tool logos always show their true brand color, no
+   grayscale-then-reveal-on-hover (that pattern only reads well on a dark
+   background). !important is needed because these already carry their own
+   filter (which would otherwise fight the page-wide invert above depending
+   on hover state / specificity). Same filter in both states = "stays the
+   same whether hovered or not", as requested. */
+html.light-theme .logo-mono,
+html.light-theme .logo-mono:hover,
+html.light-theme .tech-icon-color,
+html.light-theme .group:hover .tech-icon-color {
+	filter: invert(1) hue-rotate(180deg) !important;
+	opacity: 1 !important;
+}
+html.light-theme .logo-mono-plain,
+html.light-theme .logo-mono-plain:hover,
+html.light-theme .tech-icon-mono,
+html.light-theme .group:hover .tech-icon-mono {
+	filter: brightness(0) invert(1) !important;
+	opacity: 1 !important;
+}
+
 @keyframes blink {
 	0%, 100% { opacity: 1; }
 	50% { opacity: 0; }

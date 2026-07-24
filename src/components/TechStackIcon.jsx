@@ -9,8 +9,8 @@ const TechStackIcon = ({ TechStackIcon, Language, mono = false }) => {
         loading="lazy"
         className={`h-14 w-14 md:h-16 md:w-16 transition-all duration-300 ${
           mono
-            ? "brightness-0 invert opacity-70 group-hover:opacity-100"
-            : "grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100"
+            ? "tech-icon-mono brightness-0 invert opacity-70 group-hover:opacity-100"
+            : "tech-icon-color grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100"
         }`}
       />
       <span className="text-sm md:text-base font-medium text-gray-400 group-hover:text-white transition-colors duration-300">

@@ -19,7 +19,7 @@ const PAUSE_DURATION = 2200;
 const TECH_LOGOS = [
   { src: "/reactjs.svg", name: "React" },
   { src: "/nodejs.svg", name: "Node.js" },
-  { src: "/tailwind.svg", name: "Tailwind" },
+  { src: "/tailwind.svg", name: "Tailwind", wide: true },
   { src: "/laravel.svg", name: "Laravel" },
   { src: "/python.svg", name: "Python" },
   { src: "/postgresql.svg", name: "PostgreSQL" },
@@ -213,7 +213,7 @@ const Home = () => {
                 src={t.src}
                 alt={t.name}
                 title={t.name}
-                className={`${t.plain ? "logo-mono-plain" : "logo-mono"} h-6 sm:h-7 w-auto`}
+                className={`${t.plain ? "logo-mono-plain" : "logo-mono"} ${t.wide ? "h-3.5 sm:h-4" : "h-6 sm:h-7"} w-auto`}
                 loading="lazy"
               />
             ))}
