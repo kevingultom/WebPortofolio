@@ -98,6 +98,19 @@ html.light-theme .group:hover .tech-icon-mono {
 	animation: blink 1s step-end infinite;
 }
 
+/* Respect users who prefer reduced motion: strip decorative animation and
+   transitions down to near-instant so nothing flashes or slides. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
 @keyframes blob {
 	0%,
 	100% {

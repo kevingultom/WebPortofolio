@@ -160,14 +160,16 @@ const Navbar = () => {
                         <div className="md:hidden">
                             <button
                                 onClick={() => setIsOpen(!isOpen)}
+                                aria-label={isOpen ? "Close menu" : "Open menu"}
+                                aria-expanded={isOpen}
                                 className={`relative p-2 text-gray-300 hover:text-white transition-transform duration-300 ease-in-out transform ${
                                     isOpen ? "rotate-90 scale-125" : "rotate-0 scale-100"
                                 }`}
                             >
                                 {isOpen ? (
-                                    <X className="w-6 h-6" />
+                                    <X className="w-6 h-6" aria-hidden="true" />
                                 ) : (
-                                    <Menu className="w-6 h-6" />
+                                    <Menu className="w-6 h-6" aria-hidden="true" />
                                 )}
                             </button>
                         </div>

@@ -106,6 +106,29 @@ function a11yProps(index) {
   };
 }
 
+// Lightweight pulsing placeholders shown while Supabase data is loading, so
+// the grid doesn't look broken/empty on a slow connection.
+const SkeletonProjectCard = () => (
+  <div className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden animate-pulse" aria-hidden="true">
+    <div className="aspect-[16/10] bg-white/5" />
+    <div className="p-5 sm:p-6 space-y-3">
+      <div className="h-5 w-2/3 rounded bg-white/10" />
+      <div className="h-3.5 w-full rounded bg-white/5" />
+      <div className="h-3.5 w-4/5 rounded bg-white/5" />
+      <div className="pt-4 mt-2 border-t border-white/[0.06] flex justify-between">
+        <div className="h-4 w-20 rounded bg-white/5" />
+        <div className="h-4 w-16 rounded bg-white/5" />
+      </div>
+    </div>
+  </div>
+);
+
+const SkeletonCertificateCard = () => (
+  <div className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden animate-pulse" aria-hidden="true">
+    <div className="aspect-[4/3] bg-white/5" />
+  </div>
+);
+
 // techStacks tetap sama
 const techStacks = [
   { icon: "python.svg", language: "Python" },
@@ -142,6 +165,7 @@ export default function FullWidthTabs() {
   const [certificates, setCertificates] = useState([]);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertificates, setShowAllCertificates] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
 
@@ -209,9 +233,10 @@ export default function FullWidthTabs() {
     if (cachedProjects && cachedCertificates) {
         setProjects(JSON.parse(cachedProjects));
         setCertificates(JSON.parse(cachedCertificates));
+        setIsLoading(false); // already have something to show; fetch still syncs in the background
     }
-    
-    fetchData(); // Tetap panggil fetchData untuk sinkronisasi data terbaru
+
+    fetchData().finally(() => setIsLoading(false)); // Tetap panggil fetchData untuk sinkronisasi data terbaru
   }, [fetchData]);
 
   const handleChange = (event, newValue) => {
@@ -341,6 +366,8 @@ export default function FullWidthTabs() {
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+                {isLoading && displayedProjects.length === 0 &&
+                  Array.from({ length: initialItems }).map((_, i) => <SkeletonProjectCard key={`skeleton-${i}`} />)}
                 {displayedProjects.map((project, index) => (
                   <div
                     key={project.id || index}
@@ -358,6 +385,9 @@ export default function FullWidthTabs() {
                   </div>
                 ))}
               </div>
+              {!isLoading && projects.length === 0 && (
+                <p className="text-gray-500 text-sm py-10">{t.portfolio.noProjects}</p>
+              )}
             </div>
             {projects.length > initialItems && (
               <div className="mt-8 w-full flex justify-center">
@@ -372,6 +402,8 @@ export default function FullWidthTabs() {
           <TabPanel value={value} index={1} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 gap-4">
+                {isLoading && displayedCertificates.length === 0 &&
+                  Array.from({ length: initialItems }).map((_, i) => <SkeletonCertificateCard key={`skeleton-${i}`} />)}
                 {displayedCertificates.map((certificate, index) => (
                   <div
                     key={certificate.id || index}
@@ -384,6 +416,9 @@ export default function FullWidthTabs() {
                   </div>
                 ))}
               </div>
+              {!isLoading && certificates.length === 0 && (
+                <p className="text-gray-500 text-sm py-10">{t.portfolio.noCertificates}</p>
+              )}
             </div>
             {certificates.length > initialItems && (
               <div className="mt-8 w-full flex justify-center">

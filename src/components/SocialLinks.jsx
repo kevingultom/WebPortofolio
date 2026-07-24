@@ -94,6 +94,7 @@ const SocialTile = ({ link, primary = false, delay = 0 }) => {
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={`${link.name} (opens in a new tab)`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       className={`relative flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 transition-colors duration-300 hover:border-white/20 ${

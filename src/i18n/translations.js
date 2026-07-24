@@ -41,6 +41,8 @@ export const translations = {
       tabs: { projects: "Projects", certificates: "Certificates", techStack: "Tech Stack" },
       seeMore: "See More",
       seeLess: "See Less",
+      noProjects: "No projects to show yet.",
+      noCertificates: "No certificates to show yet.",
     },
     contact: {
       eyebrow: "Contact",
@@ -84,6 +86,7 @@ export const translations = {
       minutesAgo: "m ago",
       hoursAgo: "h ago",
       daysAgo: "d ago",
+      cooldown: "Please wait {seconds}s before posting another comment.",
     },
     social: {
       connectTitle: "Connect With Me",
@@ -141,6 +144,8 @@ export const translations = {
       tabs: { projects: "Proyek", certificates: "Sertifikat", techStack: "Teknologi" },
       seeMore: "Lihat Selengkapnya",
       seeLess: "Sembunyikan",
+      noProjects: "Belum ada project untuk ditampilkan.",
+      noCertificates: "Belum ada sertifikat untuk ditampilkan.",
     },
     contact: {
       eyebrow: "Kontak",
@@ -184,6 +189,7 @@ export const translations = {
       minutesAgo: "m lalu",
       hoursAgo: "j lalu",
       daysAgo: "h lalu",
+      cooldown: "Harap tunggu {seconds} detik sebelum mengirim komentar lagi.",
     },
     social: {
       connectTitle: "Terhubung Dengan Saya",

@@ -40,6 +40,7 @@ const SocialLink = memo(({ icon: Icon, link, name }) => {
   const brand = BRAND_COLORS[name];
   return (
     <a href={link} target="_blank" rel="noopener noreferrer"
+      aria-label={name}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       className="flex items-center justify-center w-10 h-10 rounded-full border transition-colors duration-300"
@@ -47,7 +48,7 @@ const SocialLink = memo(({ icon: Icon, link, name }) => {
         borderColor: hover ? `${brand}66` : "rgba(255,255,255,0.1)",
         backgroundColor: hover ? `${brand}1A` : "rgba(255,255,255,0.02)",
       }}>
-      <Icon className="w-[18px] h-[18px] transition-colors duration-300" style={{ color: hover ? brand : "#9ca3af" }} />
+      <Icon className="w-[18px] h-[18px] transition-colors duration-300" style={{ color: hover ? brand : "#9ca3af" }} aria-hidden="true" />
     </a>
   );
 });
@@ -66,7 +67,11 @@ const HeroLogo = memo(() => {
     maskSize: "contain",
   };
   return (
-    <div className="group self-center lg:self-start mx-auto lg:mx-0 lg:ml-10 w-44 h-44 sm:w-64 sm:h-64 lg:w-72 lg:h-72 shrink-0 relative">
+    <div
+      role="img"
+      aria-label="Kevin Gultom logo"
+      className="group self-center lg:self-start mx-auto lg:mx-0 lg:ml-10 w-44 h-44 sm:w-64 sm:h-64 lg:w-72 lg:h-72 shrink-0 relative"
+    >
       {/* White layer (default) */}
       <div
         className="absolute inset-0 bg-white transition-opacity duration-500 group-hover:opacity-0"

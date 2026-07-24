@@ -67,14 +67,16 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }) => {
     );
 });
 
-const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
+const CommentForm = memo(({ onSubmit, isSubmitting, error, cooldownRemaining }) => {
     const { t } = useLanguage();
     const [newComment, setNewComment] = useState('');
     const [userName, setUserName] = useState('');
     const [imagePreview, setImagePreview] = useState(null);
     const [imageFile, setImageFile] = useState(null);
+    const [honeypot, setHoneypot] = useState(''); // bots tend to auto-fill this; humans never see it
     const textareaRef = useRef(null);
     const fileInputRef = useRef(null);
+    const onCooldown = cooldownRemaining > 0;
 
     const handleImageChange = useCallback((e) => {
         const file = e.target.files[0];
@@ -111,8 +113,11 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
 
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
-        if (!newComment.trim() || !userName.trim()) return;
-        
+        if (!newComment.trim() || !userName.trim() || onCooldown) return;
+        // Honeypot tripped: silently drop the submission without any error,
+        // so a bot filling this hidden field never learns it was rejected.
+        if (honeypot) return;
+
         onSubmit({ newComment, userName, imageFile });
         setNewComment('');
         setUserName('');
@@ -120,10 +125,24 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
         setImageFile(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
-    }, [newComment, userName, imageFile, onSubmit]);
+    }, [newComment, userName, imageFile, onSubmit, honeypot, onCooldown]);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Honeypot: hidden from real users (off-screen, unfocusable, not
+                announced to screen readers), but simple bots that auto-fill
+                every field will populate it and get silently rejected. */}
+            <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+            />
+
             <div className="space-y-2" data-aos="fade-up" data-aos-duration="1000">
                 <label className="block text-sm font-medium text-white">
                     {t.comments.nameLabel} <span className="text-red-400">*</span>
@@ -207,7 +226,7 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
 
             <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || onCooldown}
                 data-aos="fade-up" data-aos-duration="1000"
                 className="relative w-full h-12 bg-white text-black rounded-xl font-medium overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:bg-gray-200 hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
             >
@@ -218,6 +237,8 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span>{t.comments.posting}</span>
                         </>
+                    ) : onCooldown ? (
+                        <span>{t.comments.cooldown.replace('{seconds}', cooldownRemaining)}</span>
                     ) : (
                         <>
                             <Send className="w-4 h-4" />
@@ -230,12 +251,31 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
     );
 });
 
+const COMMENT_COOLDOWN_MS = 60 * 1000; // 60s between comments per browser
+const COOLDOWN_STORAGE_KEY = 'last-comment-time';
+
 const Komentar = () => {
     const { t } = useLanguage();
     const [comments, setComments] = useState([]);
     const [pinnedComment, setPinnedComment] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [cooldownRemaining, setCooldownRemaining] = useState(0);
+
+    // Client-side cooldown: throttles rapid repeat submissions from the same
+    // browser. Not a substitute for server-side protection, but stops naive
+    // spam scripts and accidental double-posts without needing a backend.
+    useEffect(() => {
+        const getRemaining = () => {
+            const last = Number(localStorage.getItem(COOLDOWN_STORAGE_KEY) || 0);
+            return Math.max(0, Math.ceil((COMMENT_COOLDOWN_MS - (Date.now() - last)) / 1000));
+        };
+        setCooldownRemaining(getRemaining());
+        const interval = setInterval(() => {
+            setCooldownRemaining(getRemaining());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         // Initialize AOS
@@ -355,6 +395,9 @@ const Komentar = () => {
             if (error) {
                 throw error;
             }
+
+            localStorage.setItem(COOLDOWN_STORAGE_KEY, String(Date.now()));
+            setCooldownRemaining(Math.ceil(COMMENT_COOLDOWN_MS / 1000));
         } catch (error) {
             setError(t.comments.postError);
             console.error('Error adding comment: ', error);
@@ -407,7 +450,7 @@ const Komentar = () => {
                 )}
                 
                 <div>
-                    <CommentForm onSubmit={handleCommentSubmit} isSubmitting={isSubmitting} error={error} />
+                    <CommentForm onSubmit={handleCommentSubmit} isSubmitting={isSubmitting} error={error} cooldownRemaining={cooldownRemaining} />
                 </div>
 
                 <div className="space-y-4 h-[328px] overflow-y-auto overflow-x-hidden custom-scrollbar pt-1 pr-1 " data-aos="fade-up" data-aos-delay="200">
