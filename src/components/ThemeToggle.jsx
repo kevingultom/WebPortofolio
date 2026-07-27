@@ -10,20 +10,22 @@ const ThemeToggle = () => {
       <button
         onClick={() => setTheme("dark")}
         aria-label="Dark mode"
+        aria-pressed={theme === "dark"}
         className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 ${
           theme === "dark" ? "bg-white/15 text-white" : "text-gray-500 hover:text-gray-300"
         }`}
       >
-        <Moon className="w-4 h-4" />
+        <Moon className="w-4 h-4" aria-hidden="true" />
       </button>
       <button
         onClick={() => setTheme("light")}
         aria-label="Light mode"
+        aria-pressed={theme === "light"}
         className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 ${
           theme === "light" ? "bg-white/15 text-white" : "text-gray-500 hover:text-gray-300"
         }`}
       >
-        <Sun className="w-4 h-4" />
+        <Sun className="w-4 h-4" aria-hidden="true" />
       </button>
     </div>
   );

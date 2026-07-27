@@ -80,13 +80,15 @@ const Certificate = ({ ImgSertif, Link }) => {
 							filter: `${invertPrefix}contrast(1.10) brightness(0.9) saturate(1.1)`,
 							transition: "filter 0.3s ease",
 						}}
-						onClick={handleOpen}
 					/>
 				</Box>
 
 				{/* Hover Overlay */}
 				<Box
+					component="button"
+					type="button"
 					className="overlay"
+					aria-label="View certificate fullscreen"
 					sx={{
 						position: "absolute",
 						top: 0,
@@ -97,6 +99,15 @@ const Certificate = ({ ImgSertif, Link }) => {
 						transition: "all 0.3s ease",
 						cursor: "pointer",
 						zIndex: 2,
+						border: "none",
+						background: "none",
+						padding: 0,
+						font: "inherit",
+						"&:focus-visible": {
+							opacity: 1,
+							outline: "2px solid rgba(255,255,255,0.8)",
+							outlineOffset: "-2px",
+						},
 					}}
 					onClick={handleOpen}>
 					{/* Hover Content */}
@@ -194,6 +205,7 @@ const Certificate = ({ ImgSertif, Link }) => {
 					{/* Close Button */}
 					<IconButton
 						onClick={handleClose}
+						aria-label="Close certificate viewer"
 						sx={{
 							position: "absolute",
 							right: 16,

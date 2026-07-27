@@ -7,7 +7,7 @@ const LanguageToggle = () => {
     return (
         <button
             onClick={toggleLanguage}
-            aria-label="Toggle language"
+            aria-label={lang === "en" ? "Switch to Indonesian" : "Switch to English"}
             className="flex items-center rounded-full border border-white/15 bg-white/5 p-0.5 text-xs font-semibold"
         >
             <span

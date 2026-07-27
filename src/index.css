@@ -23,6 +23,17 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+/* Default browser focus outlines resolve to a near-black color on this
+   monochrome theme's dark backgrounds, making them invisible for keyboard
+   users. Force a high-contrast visible ring instead. */
+:focus-visible {
+	outline: 2px solid #ffffff;
+	outline-offset: 2px;
+}
+html.light-theme :focus-visible {
+	outline-color: #000000;
+}
+
 /* Light mode: the whole site is monochrome (black/white/gray), so a single
    invert flips it correctly (black<->white, text auto-flips too) instead of
    re-theming every component by hand. hue-rotate(180deg) keeps any accent
