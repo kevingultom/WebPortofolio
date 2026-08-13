@@ -189,18 +189,25 @@ export default function FullWidthTabs() {
       if (certificatesResponse.error) throw certificatesResponse.error;
 
       // Supabase mengembalikan data dalam properti 'data'
-      const projectData = (projectsResponse.data || []).map(p => ({
-        id: p.id,
-        Title: p.title,
-        Description: p.description,
-        Img: p.img,
-        DetailImg: p.detail_img,
-        Link: p.link,
-        ApkLink: p.apk_link,
-        Github: p.github,
-        TechStack: p.tech_stack || [],
-        Features: p.features || [],
-      }));
+      const projectData = (projectsResponse.data || []).map(p => {
+        let apkLink = p.apk_link;
+        if (p.title && p.title.toLowerCase().includes('mythera')) {
+          apkLink = 'https://github.com/kevingultom/Mythera/releases/latest/download/app-arm64-v8a-release.apk';
+        }
+        
+        return {
+          id: p.id,
+          Title: p.title,
+          Description: p.description,
+          Img: p.img,
+          DetailImg: p.detail_img,
+          Link: p.link,
+          ApkLink: apkLink,
+          Github: p.github,
+          TechStack: p.tech_stack || [],
+          Features: p.features || [],
+        };
+      });
 
       console.log("PROJECTS FROM SUPABASE:", projectData);
 

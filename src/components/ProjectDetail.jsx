@@ -109,6 +109,11 @@ const ProjectDetails = () => {
         TechStack: selectedProject.TechStack || [],
         Github: selectedProject.Github || 'https://github.com/kevingultom',
       };
+      
+      if (enhancedProject.Title && enhancedProject.Title.toLowerCase().includes('mythera')) {
+        enhancedProject.ApkLink = 'https://github.com/kevingultom/Mythera/releases/latest/download/app-arm64-v8a-release.apk';
+      }
+      
       setProject(enhancedProject);
     }
   }, [id]);
